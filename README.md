@@ -34,7 +34,7 @@
 https://www.azul.com/downloads/?version=java-8-lts&os=windows&architecture=x86-64-bit&package=jdk#zulu
 
 1. クライアントのzipファイルをダウンロードします。<br>
-https://github.com/Yon4800/Error_283/releases<br>
+https://github.com/YonCursedMC/Error_283/releases<br>
 こちらの一番上の```Error_283.zip```<br>
 
 2. MultiMC<br>
@@ -57,7 +57,7 @@ Required: Java8 (zulu recommended)<br>
 https://www.azul.com/downloads/?version=java-8-lts&os=windows&architecture=x86-64-bit&package=jdk#zulu
 
 1. Download the client zip file.<br>
-https://github.com/Yon4800/Error_283/releases<br>
+https://github.com/YonCursedMC/Error_283/releases<br>
 The top one here is ``Error_283.zip```<br>
 
 2. Install MultiMC<br>
