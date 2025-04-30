@@ -1,4 +1,4 @@
-<img alt="GitHub Downloads (all releases)" src="https://img.shields.io/github/downloads/Yon4800/Error_283/total?style=for-the-badge">
+<img alt="GitHub Downloads (all releases)" src="https://img.shields.io/github/downloads/YonCursedMC/Error_283/total?style=for-the-badge">
 
 # Error_283
 
