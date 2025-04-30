@@ -83,6 +83,8 @@ https://freesound.org<br>
 - pixabay様<br>
 https://pixabay.com<br>
 - Error422などで使われている音<br>
+- レタスさんの制作した音<br>
+- パピンヨさんの制作した音<br>
 ### アイコン
 - ガン萎え太郎/匿名 様
 ### 一部コード(AI)
@@ -107,6 +109,8 @@ https://freesound.org<br>
 - pixabay<br>
 https://pixabay.com<br>
 - Sounds used in Error422 etc.<br>
+- Sounds created by retasu<br>
+- Sounds created by Pap1nyo<br>
 ### icon
 - gannaetaro/tokumei
 ### Some code
@@ -130,21 +134,9 @@ You'll have to wait to try it out to see what the elements are.<br>
 
 ※ サーバーでやる際の注意
 - シングルプレイと仕様が違うことがあります。注意してください。
-- キックされることがありますが仕様です。<br>
 
 ※ Notes when playing on a server
 - The design may differ from single player. Please be careful.
-- You may be kicked, but this is by design.<br>
 
-## Safe版について
-- safe版は、ノイズのちらつきがないバージョンです。
-- マルチで長時間やる場合やちらつきが苦手な方はそちらを利用下さい。
-- 「Error888_safes.zip」というファイル名です
-
-## About safe version
-- The safe version is a version without noise flickering.
-- Please use this version if you are going to play multiplayer for a long time or if you don't like flickering.
-- The file name is "Error888_safes.zip"
-
-https://en.wikipedia.org/wiki/Konami_Code
-https://ja.wikipedia.org/wiki/%E3%82%B3%E3%83%8A%E3%83%9F%E3%82%B3%E3%83%9E%E3%83%B3%E3%83%89
+F6 + T
+F9 + T
