@@ -1,6 +1,6 @@
 <img alt="GitHub Downloads (all releases)" src="https://img.shields.io/github/downloads/YonCursedMC/Error_283/total?style=for-the-badge">
 
-# Error_283(Discontinue. Do not update.)
+# Error_283
 
 ## 注意
 - このバージョンはMojang公式から実際に出されたものではなく、また公式に認定されたものでもありません。
