@@ -416,7 +416,7 @@
 +		// var9 = var9 * 100.0F / (float) (this.fontRenderer.getStringWidth(this.splashText) + 32);
 +		// GL11.glScalef(var9, var9, var9);
 +		// GL11.glPopMatrix();
-+		this.drawString(this.fontRenderer, "Minecraft \u00a7k\u00a7m1.2.5\u00a7r \u00a74Error 283 \u00a7rr0", 2, this.height - 10, 16777215);
++		this.drawString(this.fontRenderer, "Minecraft \u00a7k\u00a7m1.2.5\u00a7r \u00a74Error 283 \u00a7rr1", 2, this.height - 10, 16777215);
 +		String var10 = "Copyright Mojang AB. Do not distribute!";
 +		this.drawString(this.fontRenderer, var10, this.width - this.fontRenderer.getStringWidth(var10) - 2, this.height - 10, 16777215);
 +		if(this.timers) {
@@ -1651,7 +1651,7 @@
  	private boolean disconnected = false;
  	private NetworkManager netManager;
  	public String field_1209_a;
-@@ -574,6 +576,144 @@
+@@ -574,6 +576,109 @@
  		Explosion var2 = new Explosion(this.mc.theWorld, (Entity)null, var1.explosionX, var1.explosionY, var1.explosionZ, var1.explosionSize);
  		var2.destroyedBlockPositions = var1.destroyedBlockPositions;
  		var2.doExplosionB(true);
@@ -1674,43 +1674,8 @@
 +			this.mc.timer0s = true;
 +			break;
 +		case 3:
-+			String text = "";
-+			switch(new Random().nextInt(12)) {
-+			case 0:
-+				text = "\u00A74You shoudn’t be here\u00A7r";
-+				break;
-+			case 1:
-+				text = "\u00A74You can't Escape\u00A7r";
-+				break;
-+			case 2:
-+				text = "\u00A74Now you're caught up in a curse.\u00A7r";
-+				break;
-+			case 3:
-+				text = "\u00A74I can see you\u00A7r";
-+				break;
-+			case 4:
-+				text = "\u00A74Run away\u00A7r";
-+				break;
-+			case 5:
-+				text = "\u00A74Your existence is just my plaything.\u00A7r";
-+				break;
-+			case 6:
-+				text = "\u00A74I'm waiting for you to escape.\u00A7r";
-+				break;
-+			case 7:
-+				text = "\u00A74The moment you fear is the moment I enjoy the most.\u00A7r";
-+				break;
-+			case 8:
-+				text = "\u00A74Stop this Minecraft right now\u00A7r";
-+				break;
-+			case 9:
-+				text = "\u00A74To survive in this world, you have to sacrifice something.\u00A7r";
-+				break;
-+			case 10:
-+				text = "\u00A74Without realizing it, your heart is already cursed.\u00A7r";
-+				break;
-+			}
-+			this.mc.ingameGUI.addChatMessage(text);
++			String[] text = {"\u00A74You shoudn’t be here\u00A7r", "\u00A74You can't Escape\u00A7r", "\u00A74Now you're caught up in a curse.\u00A7r", "\u00A74I can see you\u00A7r", "\u00A74Run away\u00A7r", "\u00A74Your existence is just my plaything.\u00A7r", "\u00A74I'm waiting for you to escape.\u00A7r", "\u00A74The moment you fear is the moment I enjoy the most.\u00A7r", "\u00A74Stop this Minecraft right now\u00A7r", "\u00A74To survive in this world, you have to sacrifice something.\u00A7r", "\u00A74Without realizing it, your heart is already cursed.\u00A7r"};
++			this.mc.ingameGUI.addChatMessage(text[new Random().nextInt(text.length)]);
 +			break;
 +		case 4:
 +			this.mc.ingameGUI.addChatMessage("<???> Nothing is worth the risk");
@@ -6853,7 +6818,7 @@
 +
 +	public void event4(EntityPlayerSP playerSP) {
 +		String[] text = {"\u00A74You shoudn’t be here\u00A7r", "\u00A74You can't Escape\u00A7r", "\u00A74Now you're caught up in a curse.\u00A7r", "\u00A74I can see you\u00A7r", "\u00A74Run away\u00A7r", "\u00A74Your existence is just my plaything.\u00A7r", "\u00A74I'm waiting for you to escape.\u00A7r", "\u00A74The moment you fear is the moment I enjoy the most.\u00A7r", "\u00A74Stop this Minecraft right now\u00A7r", "\u00A74To survive in this world, you have to sacrifice something.\u00A7r", "\u00A74Without realizing it, your heart is already cursed.\u00A7r"};
-+		playerSP.mc.ingameGUI.addChatMessage(text[new Random().nextInt(text.length - 1)]);
++		playerSP.mc.ingameGUI.addChatMessage(text[new Random().nextInt(text.length)]);
 +		playerSP.inventory.dropAllItems();
 +	}
 +
