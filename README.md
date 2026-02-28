@@ -82,9 +82,7 @@ and once the installation is complete, drag and drop the zip file downloaded in 
 https://freesound.org<br>
 - pixabay様<br>
 https://pixabay.com<br>
-- Error422などで使われている音<br>
 - レタスさんの制作した音<br>
-- パピンヨさんの制作した音<br>
 ### アイコン
 - ガン萎え太郎/匿名 様
 ### 一部コード(AI)
@@ -108,9 +106,7 @@ https://freesound.org<br>
   - <a href="https://freesound.org/people/InspectorJ/sounds/573189/">Computer Glitching, Digital Data Corruption, 02-04 LOOP.wav</a> by <a href="https://freesound.org/people/InspectorJ/">InspectorJ</a> | License: <a href="https://creativecommons.org/licenses/by/4.0/">Attribution 4.0</a><br>
 - pixabay<br>
 https://pixabay.com<br>
-- Sounds used in Error422 etc.<br>
 - Sounds created by retasu<br>
-- Sounds created by Pap1nyo<br>
 ### icon
 - gannaetaro/tokumei
 ### Some code
