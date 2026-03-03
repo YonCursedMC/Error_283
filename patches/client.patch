@@ -416,7 +416,7 @@
 +		// var9 = var9 * 100.0F / (float) (this.fontRenderer.getStringWidth(this.splashText) + 32);
 +		// GL11.glScalef(var9, var9, var9);
 +		// GL11.glPopMatrix();
-+		this.drawString(this.fontRenderer, "Minecraft \u00a7k\u00a7m1.2.5\u00a7r \u00a74Error 283 \u00a7rr2", 2, this.height - 10, 16777215);
++		this.drawString(this.fontRenderer, "Minecraft \u00a7k\u00a7m1.2.5\u00a7r \u00a74Error 283 \u00a7rr3", 2, this.height - 10, 16777215);
 +		String var10 = "Copyright Mojang AB. Do not distribute!";
 +		this.drawString(this.fontRenderer, var10, this.width - this.fontRenderer.getStringWidth(var10) - 2, this.height - 10, 16777215);
 +		if(this.timers) {
@@ -3426,7 +3426,7 @@
 +}
 --- /dev/null
 +++ net/minecraft/src/GuiYesNoTP.java
-@@ -1,0 +1,66 @@
+@@ -1,0 +1,67 @@
 +package net.minecraft.src;
 +
 +import java.util.Random;
@@ -3458,6 +3458,7 @@
 +	protected void actionPerformed(GuiButton var1) {
 +		if(var1.id == new Random().nextInt(2)) {
 +			if(!this.mc.isMultiplayerWorld()) {
++				this.mc.thePlayer.inventory.dropAllItems();
 +				new WorldGenThinking().generate(this.mc.theWorld, new Random(), 0, 200, 0);
 +				this.mc.thePlayer.setLocationAndAngles3(3, 203, 3, -90, 0);
 +				this.mc.thePlayer.longtag = true;
@@ -5812,7 +5813,7 @@
 +								}
 +							}
 +							if(Keyboard.getEventKey() == Keyboard.KEY_T && Keyboard.isKeyDown(Keyboard.KEY_F9)) {
-+								//this.theWorld.worldRandomEvent.event2(this.thePlayer);
++								//this.theWorld.worldRandomEvent.event3(this.thePlayer);
 +							}
 +
  							if(Keyboard.getEventKey() == Keyboard.KEY_F && Keyboard.isKeyDown(Keyboard.KEY_F3)) {
@@ -7343,7 +7344,7 @@
 +}
 --- /dev/null
 +++ net/minecraft/src/EntityLongFix.java
-@@ -1,0 +1,50 @@
+@@ -1,0 +1,62 @@
 +package net.minecraft.src;
 +
 +public class EntityLongFix extends EntityAnimalAttackLong {
@@ -7359,6 +7360,18 @@
 +
 +	public int getMaxHealth() {
 +		return 283;
++	}
++
++	public void onUpdate() {
++		super.onUpdate();
++		EntityPlayer player = this.worldObj.getClosestPlayerToEntity(this, 56.0D);
++		if(player != null){
++			if(this.getDistanceToEntity(player) <= 24.0D){
++				for(int i = 0; i < 3; i++) {
++					super.onUpdate();
++				}
++			}
++		}
 +	}
 +
 +	public void onLivingUpdate() {

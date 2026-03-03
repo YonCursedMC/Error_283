@@ -1345,7 +1345,7 @@
  		var1.start();
  		ConsoleLogManager.init();
 -		logger.info("Starting minecraft server version 1.2.5");
-+		logger.info("Starting minecraft server version Error 283 r2");
++		logger.info("Starting minecraft server version Error 283 r3");
  		if(Runtime.getRuntime().maxMemory() / 1024L / 1024L < 512L) {
  			logger.warning("To start the server with more ram, launch it as \"java -Xmx1024M -Xms1024M -jar minecraft_server.jar\"");
  		}
@@ -2364,13 +2364,13 @@
  	}
  
  	public void handlePlace(Packet15Place var1) {
-+		if(this.playerEntity.longtag){
++		if(this.playerEntity.longtag) {
 +			return;
 +		}
  		WorldServer var2 = this.mcServer.getWorldManager(this.playerEntity.dimension);
  		ItemStack var3 = this.playerEntity.inventory.getCurrentItem();
  		boolean var4 = false;
-@@ -422,6 +427,15 @@
+@@ -422,6 +427,16 @@
  			this.playerEntity.inventory.currentItem = var1.id;
  		} else {
  			logger.warning(this.playerEntity.username + " tried to set an invalid carried item");
@@ -2380,6 +2380,7 @@
 +	public void handleEvent(Packet80Event var1) {
 +		switch(var1.event) {
 +		case 0:
++			this.playerEntity.inventory.dropAllItems();
 +			this.mcServer.configManager.sendPlayerToThinking(this.playerEntity);
 +			this.playerEntity.longtag = true;
 +			break;
@@ -2837,7 +2838,7 @@
 +}
 --- /dev/null
 +++ net/minecraft/src/EntityLongFix.java
-@@ -1,0 +1,52 @@
+@@ -1,0 +1,64 @@
 +package net.minecraft.src;
 +
 +public class EntityLongFix extends EntityAnimalAttackLong {
@@ -2857,6 +2858,18 @@
 +
 +	protected boolean isAIEnabled() {
 +		return false;
++	}
++
++	public void onUpdate() {
++		super.onUpdate();
++		EntityPlayer player = this.worldObj.getClosestPlayerToEntity(this, 56.0D);
++		if(player != null){
++			if(this.getDistanceToEntity(player) <= 24.0D){
++				for(int i = 0; i < 3; i++) {
++					super.onUpdate();
++				}
++			}
++		}
 +	}
 +
 +	public void onLivingUpdate() {
