@@ -500,10 +500,12 @@
 +}
 --- /dev/null
 +++ net/minecraft/src/EntityEbrine.java
-@@ -1,0 +1,52 @@
+@@ -1,0 +1,63 @@
 +package net.minecraft.src;
 +
-+public class EntityEbrine extends EntityMob {
++import net.minecraft.client.Minecraft;
++
++public class EntityEbrine extends EntityAnimalAttack {
 +
 +	public EntityEbrine(World var1) {
 +		super(var1);
@@ -522,6 +524,15 @@
 +
 +	public void onLivingUpdate() {
 +		super.onLivingUpdate();
++		if(!this.worldObj.isRemote) {
++			EntityPlayer player = this.worldObj.getClosestPlayerToEntity(this, 30.0F);
++			if(player != null) {
++				if(this.getDistanceToEntity(player) <= 10.0F) {
++					this.setDead();
++					ButtonMiss.quitmiss();
++				}
++			}
++		}
 +	}
 +
 +	protected String getLivingSound() {
@@ -542,10 +553,10 @@
 +
 +	protected void attackEntity(Entity var1, float var2) {
 +		super.attackEntity(var1, var2);
-+		if(!this.worldObj.isRemote) {
-+			this.setDead();
-+			ButtonMiss.quitmiss();
-+		}
++	}
++
++	public EntityAnimal spawnBabyAnimal(EntityAnimal var1) {
++		return null;
 +	}
 +
 +	protected boolean canDespawn() {
@@ -969,7 +980,7 @@
  								--var13;
 --- /dev/null
 +++ net/minecraft/src/ModelLongFix.java
-@@ -1,0 +1,110 @@
+@@ -1,0 +1,107 @@
 +package net.minecraft.src;
 +
 +public class ModelLongFix extends ModelBase {
@@ -994,24 +1005,24 @@
 +		short textureHeight = 64;
 +		this.bipedHead = new ModelRenderer(this, 32, 0).setTextureSize(textureWidth, textureHeight);
 +		this.bipedHead.addBox(-4.0F, -16.0F, -4.0F, 8, 16, 8, var1);
-+		this.bipedHead.setRotationPoint(0.0F, -24.0F + var2, 0.0F);
++		this.bipedHead.setRotationPoint(0.0F, -44.0F + var2, 0.0F);
 +		this.bipedBody = new ModelRenderer(this, 16, 24).setTextureSize(textureWidth, textureHeight);
-+		this.bipedBody.addBox(-4.0F, 0.0F, -2.0F, 8, 36, 4, var1);
-+		this.bipedBody.setRotationPoint(0.0F, -24.0F + var2, 0.0F);
++		this.bipedBody.addBox(-4.0F, -18.0F, -2.0F, 8, 36, 4, var1);
++		this.bipedBody.setRotationPoint(0.0F, -26.0F + var2, 0.0F);
 +		this.bipedRightArm = new ModelRenderer(this, 0, 36).setTextureSize(textureWidth, textureHeight);
 +		this.bipedRightArm.addBox(-3.0F, -2.0F, -2.0F, 4, 24, 4, var1);
-+		this.bipedRightArm.setRotationPoint(0.0F, -22.0F + var2, 0.0F);
++		this.bipedRightArm.setRotationPoint(-6.0F, -42.0F + var2, 0.0F);
 +		this.bipedLeftArm = new ModelRenderer(this, 0, 36).setTextureSize(textureWidth, textureHeight);
 +		this.bipedLeftArm.mirror = true;
 +		this.bipedLeftArm.addBox(-1.0F, -2.0F, -2.0F, 4, 24, 4, var1);
-+		this.bipedLeftArm.setRotationPoint(0.0F, -22.0F + var2, 0.0F);
-+		this.bipedRightLeg = new ModelRenderer(this, 0, 20).setTextureSize(textureWidth, textureHeight);
-+		this.bipedRightLeg.addBox(-4.0F, 0.0F, -2.0F, 4, 12, 4, var1);
-+		this.bipedRightLeg.setRotationPoint(0.0F, 12.0F + var2, 0.0F);
-+		this.bipedLeftLeg = new ModelRenderer(this, 0, 20).setTextureSize(textureWidth, textureHeight);
++		this.bipedLeftArm.setRotationPoint(6.0F, -42.0F + var2, 0.0F);
++		this.bipedRightLeg = new ModelRenderer(this, 0, 0).setTextureSize(textureWidth, textureHeight);
++		this.bipedRightLeg.addBox(-2.0F, 0.0F, -2.0F, 4, 32, 4, var1);
++		this.bipedRightLeg.setRotationPoint(-2.0F, -8.0F + var2, 0.0F); ;
++		this.bipedLeftLeg = new ModelRenderer(this, 0, 0).setTextureSize(textureWidth, textureHeight);
 +		this.bipedLeftLeg.mirror = true;
-+		this.bipedLeftLeg.addBox(0.0F, 0.0F, -2.0F, 4, 12, 4, var1);
-+		this.bipedLeftLeg.setRotationPoint(0.0F, 12.0F + var2, 0.0F);
++		this.bipedLeftLeg.addBox(-2.0F, 0.0F, -2.0F, 4, 32, 4, var1);
++		this.bipedLeftLeg.setRotationPoint(2.0F, -8.0F + var2, 0.0F);
 +	}
 +
 +	public void render(Entity var1, float var2, float var3, float var4, float var5, float var6, float var7) {
@@ -1070,9 +1081,6 @@
 +		this.bipedBody.rotateAngleX = 0.0F;
 +		this.bipedRightLeg.rotationPointZ = 0.0F;
 +		this.bipedLeftLeg.rotationPointZ = 0.0F;
-+		this.bipedRightLeg.rotationPointY = 12.0F;
-+		this.bipedLeftLeg.rotationPointY = 12.0F;
-+		this.bipedHead.rotationPointY = -24.0F;
 +
 +		this.bipedRightArm.rotateAngleZ += MathHelper.cos(var3 * 0.09F) * 0.05F + 0.05F;
 +		this.bipedLeftArm.rotateAngleZ -= MathHelper.cos(var3 * 0.09F) * 0.05F + 0.05F;
@@ -1082,10 +1090,10 @@
 +}
 --- /dev/null
 +++ net/minecraft/src/EntityPublicVoid.java
-@@ -1,0 +1,52 @@
+@@ -1,0 +1,56 @@
 +package net.minecraft.src;
 +
-+public class EntityPublicVoid extends EntityMob {
++public class EntityPublicVoid extends EntityAnimalAttack {
 +
 +	public int timer = 20 * 30;
 +
@@ -1117,6 +1125,10 @@
 +		if(this.timer <= 0) {
 +			this.setDead();
 +		}
++	}
++
++	public EntityAnimal spawnBabyAnimal(EntityAnimal var1) {
++		return null;
 +	}
 +
 +	protected String getLivingSound() {
@@ -1155,6 +1167,128 @@
  		addMapping(EntityVillager.class, "Villager", 120, 5651507, 12422002);
  		addMapping(EntityEnderCrystal.class, "EnderCrystal", 200);
  	}
+--- /dev/null
++++ net/minecraft/src/EntityAnimalAttackLong.java
+@@ -1,0 +1,119 @@
++package net.minecraft.src;
++
++public abstract class EntityAnimalAttackLong extends EntityAnimalAttack {
++	private PathEntity pathToEntity;
++
++	public EntityAnimalAttackLong(World var1) {
++		super(var1);
++	}
++
++	protected void updateEntityActionState() {
++		Profiler.startSection("ai");
++		if(this.fleeingTick > 0) {
++			--this.fleeingTick;
++		}
++
++		this.hasAttacked = this.isMovementCeased();
++		float var1 = 64.0F;
++		if(this.entityToAttack == null) {
++			this.entityToAttack = this.findPlayerToAttack();
++			if(this.entityToAttack != null) {
++				this.pathToEntity = this.worldObj.getPathEntityToEntity(this, this.entityToAttack, var1, true, false, false, true);
++			}
++		} else if(!this.entityToAttack.isEntityAlive()) {
++			this.entityToAttack = null;
++		} else {
++			float var2 = this.entityToAttack.getDistanceToEntity(this);
++			if(this.canEntityBeSeen(this.entityToAttack)) {
++				this.attackEntity(this.entityToAttack, var2);
++			} else {
++				this.attackBlockedEntity(this.entityToAttack, var2);
++			}
++		}
++
++		Profiler.endSection();
++		if(this.hasAttacked || this.entityToAttack == null || this.pathToEntity != null && this.rand.nextInt(20) != 0) {
++			if(!this.hasAttacked && (this.pathToEntity == null && this.rand.nextInt(180) == 0 || this.rand.nextInt(120) == 0 || this.fleeingTick > 0) && this.entityAge < 100) {
++				this.updateWanderPath();
++			}
++		} else {
++			this.pathToEntity = this.worldObj.getPathEntityToEntity(this, this.entityToAttack, var1, true, false, false, true);
++		}
++
++		int var21 = MathHelper.floor_double(this.boundingBox.minY + 0.5D);
++		boolean var3 = this.isInWater();
++		boolean var4 = this.handleLavaMovement();
++		this.rotationPitch = 0.0F;
++		if(this.pathToEntity != null && this.rand.nextInt(100) != 0) {
++			Profiler.startSection("followpath");
++			Vec3D var5 = this.pathToEntity.getCurrentNodeVec3d(this);
++			double var6 = (double)(this.width * 2.0F);
++
++			while(var5 != null && var5.squareDistanceTo(this.posX, var5.yCoord, this.posZ) < var6 * var6) {
++				this.pathToEntity.incrementPathIndex();
++				if(this.pathToEntity.isFinished()) {
++					var5 = null;
++					this.pathToEntity = null;
++				} else {
++					var5 = this.pathToEntity.getCurrentNodeVec3d(this);
++				}
++			}
++
++			this.isJumping = false;
++			if(var5 != null) {
++				double var8 = var5.xCoord - this.posX;
++				double var10 = var5.zCoord - this.posZ;
++				double var12 = var5.yCoord - (double)var21;
++				float var14 = (float)(Math.atan2(var10, var8) * 180.0D / (double)((float)Math.PI)) - 90.0F;
++				float var15 = var14 - this.rotationYaw;
++
++				for(this.moveForward = this.moveSpeed; var15 < -180.0F; var15 += 360.0F) {
++				}
++
++				while(var15 >= 180.0F) {
++					var15 -= 360.0F;
++				}
++
++				if(var15 > 30.0F) {
++					var15 = 30.0F;
++				}
++
++				if(var15 < -30.0F) {
++					var15 = -30.0F;
++				}
++
++				this.rotationYaw += var15;
++				if(this.hasAttacked && this.entityToAttack != null) {
++					double var16 = this.entityToAttack.posX - this.posX;
++					double var18 = this.entityToAttack.posZ - this.posZ;
++					float var20 = this.rotationYaw;
++					this.rotationYaw = (float)(Math.atan2(var18, var16) * 180.0D / (double)((float)Math.PI)) - 90.0F;
++					var15 = (var20 - this.rotationYaw + 90.0F) * (float)Math.PI / 180.0F;
++					this.moveStrafing = -MathHelper.sin(var15) * this.moveForward * 1.0F;
++					this.moveForward = MathHelper.cos(var15) * this.moveForward * 1.0F;
++				}
++
++				if(var12 > 0.0D) {
++					this.isJumping = true;
++				}
++			}
++
++			if(this.entityToAttack != null) {
++				this.faceEntity(this.entityToAttack, 30.0F, 30.0F);
++			}
++
++			if(this.isCollidedHorizontally && !this.hasPath()) {
++				this.isJumping = true;
++			}
++
++			if(this.rand.nextFloat() < 0.8F && (var3 || var4)) {
++				this.isJumping = true;
++			}
++
++			Profiler.endSection();
++		} else {
++			super.updateEntityActionState();
++			this.pathToEntity = null;
++		}
++	}
++}
 --- /dev/null
 +++ net/minecraft/src/BlockError1.java
 @@ -1,0 +1,16 @@
@@ -1207,6 +1341,18 @@
  							}
  						}
  					}
+--- net/minecraft/src/PlayerControllerSP.java
++++ net/minecraft/src/PlayerControllerSP.java
+@@ -135,6 +135,9 @@
+ 	}
+ 
+ 	public boolean onPlayerRightClick(EntityPlayer var1, World var2, ItemStack var3, int var4, int var5, int var6, int var7) {
++		if(var1.longtag){
++			return false;
++		}
+ 		int var8 = var2.getBlockId(var4, var5, var6);
+ 		return var8 > 0 && Block.blocksList[var8].blockActivated(var2, var4, var5, var6, var1) ? true : (var3 == null ? false : var3.useItem(var1, var2, var4, var5, var6, var7));
+ 	}
 --- net/minecraft/src/GuiButton.java
 +++ net/minecraft/src/GuiButton.java
 @@ -2,8 +2,10 @@
@@ -1239,10 +1385,10 @@
  			if(!this.enabled) {
 --- /dev/null
 +++ net/minecraft/src/EntityError64.java
-@@ -1,0 +1,52 @@
+@@ -1,0 +1,62 @@
 +package net.minecraft.src;
 +
-+public class EntityError64 extends EntityMob {
++public class EntityError64 extends EntityAnimalAttack {
 +
 +	public EntityError64(World var1) {
 +		super(var1);
@@ -1261,6 +1407,15 @@
 +
 +	public void onLivingUpdate() {
 +		super.onLivingUpdate();
++		if(!this.worldObj.isRemote) {
++			EntityPlayer player = this.worldObj.getClosestPlayerToEntity(this, 30.0F);
++			if(player != null) {
++				if(this.getDistanceToEntity(player) <= 10.0F) {
++					this.setDead();
++					((EntityPlayerSP)player).mc.displayGuiScreen(new GuiYesNoTP("I saw", "Yes", "Okay"));
++				}
++			}
++		}
 +	}
 +
 +	protected String getLivingSound() {
@@ -1281,10 +1436,11 @@
 +
 +	protected void attackEntity(Entity var1, float var2) {
 +		super.attackEntity(var1, var2);
-+		if(!this.worldObj.isRemote) {
-+			this.setDead();
-+			((EntityPlayerSP)var1).mc.displayGuiScreen(new GuiYesNoTP("I saw", "Yes", "Okay"));
-+		}
++	}
++
++	@Override
++	public EntityAnimal spawnBabyAnimal(EntityAnimal var1) {
++		return null;
 +	}
 +
 +	protected boolean canDespawn() {
@@ -1319,11 +1475,10 @@
  	public MovementInput movementInput;
  	protected Minecraft mc;
  	protected int sprintToggleTimer = 0;
-@@ -14,6 +17,16 @@
+@@ -14,6 +17,15 @@
  	private MouseFilter field_21903_bJ = new MouseFilter();
  	private MouseFilter field_21904_bK = new MouseFilter();
  	private MouseFilter field_21902_bL = new MouseFilter();
-+	public boolean longtag = false;
 +	public int glitchcount = 6;
 +	public boolean glitch = false;
 +	public boolean glitch2 = false;
@@ -1336,7 +1491,7 @@
  
  	public EntityPlayerSP(Minecraft var1, World var2, Session var3, int var4) {
  		super(var2);
-@@ -46,6 +59,54 @@
+@@ -46,6 +58,54 @@
  	}
  
  	public void onLivingUpdate() {
@@ -1391,11 +1546,10 @@
  		if(this.sprintingTicksLeft > 0) {
  			--this.sprintingTicksLeft;
  			if(this.sprintingTicksLeft == 0) {
-@@ -227,11 +288,27 @@
+@@ -227,11 +287,25 @@
  	public void writeEntityToNBT(NBTTagCompound var1) {
  		super.writeEntityToNBT(var1);
  		var1.setInteger("Score", this.score);
-+		var1.setBoolean("longtag", this.longtag);
 +		var1.setInteger("glitchcount", this.glitchcount);
 +		var1.setBoolean("glitch", this.glitch);
 +		var1.setBoolean("glitch2", this.glitch2);
@@ -1408,7 +1562,6 @@
  	public void readEntityFromNBT(NBTTagCompound var1) {
  		super.readEntityFromNBT(var1);
  		this.score = var1.getInteger("Score");
-+		this.longtag = var1.getBoolean("longtag");
 +		this.glitchcount = var1.getInteger("glitchcount");
 +		this.glitch = var1.getBoolean("glitch");
 +		this.glitch2 = var1.getBoolean("glitch2");
@@ -1419,7 +1572,7 @@
  	}
  
  	public void closeScreen() {
-@@ -400,5 +477,15 @@
+@@ -400,5 +474,15 @@
  		this.experience = var1;
  		this.experienceTotal = var2;
  		this.experienceLevel = var3;
@@ -1512,10 +1665,10 @@
 +}
 --- /dev/null
 +++ net/minecraft/src/Entity303brine.java
-@@ -1,0 +1,60 @@
+@@ -1,0 +1,65 @@
 +package net.minecraft.src;
 +
-+public class Entity303brine extends EntityMob {
++public class Entity303brine extends EntityAnimalAttack {
 +
 +	public Entity303brine(World var1) {
 +		super(var1);
@@ -1545,7 +1698,7 @@
 +			double newX = this.posX + deltaX * factor;
 +			double newY = this.posY + deltaY * factor;
 +			double newZ = this.posZ + deltaZ * factor;
-+			this.setPositionAndRotation(newX, newY, newZ, this.rotationYaw, this.rotationPitch);
++			this.setPosition(newX, newY, newZ);
 +		}
 +	}
 +
@@ -1567,6 +1720,11 @@
 +
 +	protected void attackEntity(Entity var1, float var2) {
 +		super.attackEntity(var1, var2);
++	}
++
++	@Override
++	public EntityAnimal spawnBabyAnimal(EntityAnimal var1) {
++		return null;
 +	}
 +
 +	protected boolean canDespawn() {
@@ -1943,23 +2101,21 @@
  	}
 --- /dev/null
 +++ net/minecraft/src/WorldGenThinking.java
-@@ -1,0 +1,25 @@
+@@ -1,0 +1,23 @@
 +package net.minecraft.src;
 +
 +import java.util.Random;
 +
 +public class WorldGenThinking extends WorldGenerator {
 +	public boolean generate(World var1, Random var2, int var3, int var4, int var5) {
-+		int lenght = 32;
++		int lenght = 48;
 +		int width = 7;
 +		int height = 10;
 +		for(int i = 0; i < lenght; i++) {
 +			for(int j = 0; j < width; j++) {
 +				for(int k = 0; k < height; k++) {
-+					if(k >= 1 && k <= 9 && j >= 1 && j <= 5 && i != 0 && i != 31) {
++					if(k >= 1 && j >= 1 && j <= width - 2 && i != 0 && i != lenght - 1) {
 +						var1.setBlockWithNotify(i + var3, k + var4, j + var5, 0);
-+					} else if(i == 0 && i == 31) {
-+						var1.setBlockWithNotify(i + var3, k + var4, j + var5, Block.bedrock.blockID);
 +					} else {
 +						var1.setBlockWithNotify(i + var3, k + var4, j + var5, Block.bedrock.blockID);
 +					}
@@ -2056,12 +2212,12 @@
  	public void randomDisplayTick(World var1, int var2, int var3, int var4, Random var5) {
 --- /dev/null
 +++ net/minecraft/src/EntityHero303.java
-@@ -1,0 +1,54 @@
+@@ -1,0 +1,66 @@
 +package net.minecraft.src;
 +
 +import java.util.Random;
 +
-+public class EntityHero303 extends EntityMob {
++public class EntityHero303 extends EntityAnimalAttack {
 +
 +	public EntityHero303(World var1) {
 +		super(var1);
@@ -2080,6 +2236,18 @@
 +
 +	public void onLivingUpdate() {
 +		super.onLivingUpdate();
++		if(!this.worldObj.isRemote) {
++			EntityPlayer player = this.worldObj.getClosestPlayerToEntity(this, 30.0F);
++			if(player != null) {
++				if(this.getDistanceToEntity(player) <= 10.0F) {
++					this.setDead();
++					int XX = (int)((new Random().nextDouble() * 1000.0F) - 500.0F);
++					int ZZ = (int)((new Random().nextDouble() * 1000.0F) - 500.0F);
++					int YY = this.worldObj.getTopSolidOrLiquidBlock(XX, ZZ);
++					player.setLocationAndAngles3(XX, YY, ZZ, 0, 0);
++				}
++			}
++		}
 +	}
 +
 +	protected String getLivingSound() {
@@ -2100,11 +2268,11 @@
 +
 +	protected void attackEntity(Entity var1, float var2) {
 +		super.attackEntity(var1, var2);
-+		if(!this.worldObj.isRemote) {
-+			this.setDead();
-+			var1.setLocationAndAngles3((new Random().nextDouble() * 1000.0F) - 500.0F,
-+					(new Random().nextDouble() * 20.0F) + 80.0F, (new Random().nextDouble() * 1000.0F) - 500.0F, 0, 0);
-+		}
++	}
++
++	@Override
++	public EntityAnimal spawnBabyAnimal(EntityAnimal var1) {
++		return null;
 +	}
 +
 +	protected boolean canDespawn() {
@@ -2428,10 +2596,10 @@
  
 --- /dev/null
 +++ net/minecraft/src/EntityBinary444.java
-@@ -1,0 +1,52 @@
+@@ -1,0 +1,56 @@
 +package net.minecraft.src;
 +
-+public class EntityBinary444 extends EntityMob {
++public class EntityBinary444 extends EntityAnimalAttack {
 +
 +	public int timer = 20 * 30;
 +
@@ -2463,6 +2631,10 @@
 +		if(this.timer <= 0) {
 +			this.setDead();
 +		}
++	}
++
++	public EntityAnimal spawnBabyAnimal(EntityAnimal var1) {
++		return null;
 +	}
 +
 +	protected String getLivingSound() {
@@ -2837,7 +3009,7 @@
  							if((double)var7 >= var16) {
  								var10 = true;
  								var15.velocityToAddToEntity(this, var12, var13, var14, var3, var11);
-@@ -1859,7 +1894,83 @@
+@@ -1859,7 +1894,89 @@
  		this.spawnPeacefulMobs = var2;
  	}
  
@@ -2879,16 +3051,19 @@
 +	}
 +
 +	public void spawns(EntityPlayerSP player) {
++		int XX = (int)player.posX + 30;
++		int ZZ = (int)player.posZ;
++		int YY = this.getTopSolidOrLiquidBlock(XX, ZZ);
 +		switch(new Random().nextInt(3)) {
 +		case 0:
 +			EntityEbrine eeb = new EntityEbrine(this);
-+			eeb.setLocationAndAngles3(player.posX + 30, player.posY + 10, player.posZ, 0, 0);
++			eeb.setLocationAndAngles3(XX, YY, ZZ, 0, 0);
 +			this.spawnEntityInWorld(eeb);
 +			player.mc.ingameGUI.addChatMessage("\u00a7eEntitybrine joined the game.");
 +			break;
 +		case 1:
 +			EntityHero303 h303 = new EntityHero303(this);
-+			h303.setLocationAndAngles3(player.posX + 30, player.posY + 10, player.posZ, 0, 0);
++			h303.setLocationAndAngles3(XX, YY, ZZ, 0, 0);
 +			this.spawnEntityInWorld(h303);
 +			player.mc.ingameGUI.addChatMessage("\u00a7eHero303 joined the game.");
 +			break;
@@ -2900,16 +3075,19 @@
 +	}
 +
 +	public void spawns2(EntityPlayerSP player) {
++		int XX = (int)player.posX + 30;
++		int ZZ = (int)player.posZ;
++		int YY = this.getTopSolidOrLiquidBlock(XX, ZZ);
 +		switch(new Random().nextInt(2)) {
 +		case 0:
 +			EntityBlood283 b283 = new EntityBlood283(this);
-+			b283.setLocationAndAngles3(player.posX + 30, player.posY + 10, player.posZ, 0, 0);
++			b283.setLocationAndAngles3(XX, YY, ZZ, 0, 0);
 +			this.spawnEntityInWorld(b283);
 +			player.mc.ingameGUI.addChatMessage("\u00a7eBlood283 joined the game.");
 +			break;
 +		case 1:
 +			EntityError64 error64 = new EntityError64(this);
-+			error64.setLocationAndAngles3(player.posX + 30, player.posY + 10, player.posZ, 0, 0);
++			error64.setLocationAndAngles3(XX, YY, ZZ, 0, 0);
 +			this.spawnEntityInWorld(error64);
 +			player.mc.ingameGUI.addChatMessage("\u00a7e\u00a7kError64\u00a7r joined the game.");
 +			break;
@@ -2921,7 +3099,7 @@
  		if(this.getWorldInfo().isHardcoreModeEnabled() && this.difficultySetting < 3) {
  			this.difficultySetting = 3;
  		}
-@@ -1880,7 +1991,8 @@
+@@ -1880,7 +1997,8 @@
  		}
  
  		Profiler.startSection("mobSpawner");
@@ -2931,7 +3109,7 @@
  		Profiler.endStartSection("chunkSource");
  		this.chunkProvider.unload100OldestChunks();
  		int var4 = this.calculateSkylightSubtracted(1.0F);
-@@ -2043,10 +2155,14 @@
+@@ -2043,10 +2161,14 @@
  			int var8 = var3.getBlockID(var5, var7, var6);
  			var5 += var1;
  			var6 += var2;
@@ -2950,7 +3128,7 @@
  					this.ambientTickCountdown = this.rand.nextInt(12000) + 6000;
  				}
  			}
-@@ -2123,6 +2239,21 @@
+@@ -2123,6 +2245,21 @@
  							var18.updateTick(this, var14 + var5, var16 + var20.getYLocation(), var15 + var6, this.rand);
  						}
  					}
@@ -2972,7 +3150,7 @@
  				}
  			}
  
-@@ -2147,7 +2278,8 @@
+@@ -2147,7 +2284,8 @@
  		} else {
  			if(var2 >= 0 && var2 < 256 && this.getSavedLightValue(EnumSkyBlock.Block, var1, var2, var3) < 10) {
  				int var7 = this.getBlockId(var1, var2, var3);
@@ -2982,7 +3160,7 @@
  					if(!var4) {
  						return true;
  					}
-@@ -2188,7 +2320,8 @@
+@@ -2188,7 +2326,8 @@
  			if(var2 >= 0 && var2 < 256 && this.getSavedLightValue(EnumSkyBlock.Block, var1, var2, var3) < 10) {
  				int var6 = this.getBlockId(var1, var2 - 1, var3);
  				int var7 = this.getBlockId(var1, var2, var3);
@@ -2992,7 +3170,7 @@
  					return true;
  				}
  			}
-@@ -2367,7 +2500,8 @@
+@@ -2367,7 +2506,8 @@
  						}
  
  						if(var14 == var13 - var23 && var6 < this.lightUpdateBlockList.length) {
@@ -3002,7 +3180,7 @@
  						}
  					}
  				}
-@@ -2415,27 +2549,33 @@
+@@ -2415,27 +2555,33 @@
  
  						if(var15 + var16 + var17 < 17 && var6 < this.lightUpdateBlockList.length - 6) {
  							if(this.getSavedLightValue(var1, var24 - 1, var9, var10) < var14) {
@@ -3042,7 +3220,7 @@
  							}
  						}
  					}
-@@ -2457,19 +2597,24 @@
+@@ -2457,19 +2603,24 @@
  
  			for(int var3 = 0; var3 < var2; ++var3) {
  				NextTickListEntry var4 = (NextTickListEntry)this.scheduledTickTreeSet.first();
@@ -3069,7 +3247,7 @@
  			}
  
  			return this.scheduledTickTreeSet.size() != 0;
-@@ -2514,7 +2659,9 @@
+@@ -2514,7 +2665,9 @@
  			int var9 = var3 + this.rand.nextInt(var4) - this.rand.nextInt(var4);
  			int var10 = this.getBlockId(var7, var8, var9);
  			if(var10 == 0 && this.rand.nextInt(8) > var8 && this.worldProvider.getWorldHasNoSky()) {
@@ -3080,7 +3258,7 @@
  			} else if(var10 > 0) {
  				Block.blocksList[var10].randomDisplayTick(this, var7, var8, var9, var5);
  			}
-@@ -2532,7 +2679,8 @@
+@@ -2532,7 +2685,8 @@
  		for(int var7 = var3; var7 <= var4; ++var7) {
  			for(int var8 = var5; var8 <= var6; ++var8) {
  				if(this.chunkExists(var7, var8)) {
@@ -3090,7 +3268,7 @@
  				}
  			}
  		}
-@@ -2637,7 +2785,8 @@
+@@ -2637,7 +2791,8 @@
  		if(var10 != null && !this.checkIfAABBIsClear(var10)) {
  			return false;
  		} else {
@@ -3100,7 +3278,7 @@
  				var8 = null;
  			}
  
-@@ -2645,7 +2794,8 @@
+@@ -2645,7 +2800,8 @@
  		}
  	}
  
@@ -3110,7 +3288,7 @@
  		Profiler.startSection("pathfind");
  		int var8 = MathHelper.floor_double(var1.posX);
  		int var9 = MathHelper.floor_double(var1.posY + 1.0D);
-@@ -2663,7 +2813,8 @@
+@@ -2663,7 +2819,8 @@
  		return var19;
  	}
  
@@ -3120,7 +3298,7 @@
  		Profiler.startSection("pathfind");
  		int var10 = MathHelper.floor_double(var1.posX);
  		int var11 = MathHelper.floor_double(var1.posY);
-@@ -2676,7 +2827,8 @@
+@@ -2676,7 +2833,8 @@
  		int var18 = var11 + var13;
  		int var19 = var12 + var13;
  		ChunkCache var20 = new ChunkCache(this, var14, var15, var16, var17, var18, var19);
@@ -3130,7 +3308,7 @@
  		Profiler.endSection();
  		return var21;
  	}
-@@ -2687,7 +2839,12 @@
+@@ -2687,7 +2845,12 @@
  	}
  
  	public boolean isBlockGettingPowered(int var1, int var2, int var3) {
@@ -3144,7 +3322,7 @@
  	}
  
  	public boolean isBlockIndirectlyProvidingPowerTo(int var1, int var2, int var3, int var4) {
-@@ -2700,7 +2857,12 @@
+@@ -2700,7 +2863,12 @@
  	}
  
  	public boolean isBlockIndirectlyGettingPowered(int var1, int var2, int var3) {
@@ -3158,7 +3336,7 @@
  	}
  
  	public EntityPlayer getClosestPlayerToEntity(Entity var1, double var2) {
-@@ -2937,7 +3099,8 @@
+@@ -2937,7 +3105,8 @@
  	}
  
  	public float getWeightedThunderStrength(float var1) {
@@ -3168,7 +3346,7 @@
  	}
  
  	public float getRainStrength(float var1) {
-@@ -3003,7 +3166,8 @@
+@@ -3003,7 +3172,8 @@
  	}
  
  	public Random setRandomSeed(int var1, int var2, int var3) {
@@ -3178,7 +3356,7 @@
  		this.rand.setSeed(var4);
  		return this.rand;
  	}
-@@ -3014,7 +3178,9 @@
+@@ -3014,7 +3184,9 @@
  
  	public SpawnListEntry getRandomMob(EnumCreatureType var1, int var2, int var3, int var4) {
  		List var5 = this.getChunkProvider().getPossibleCreatures(var1, var2, var3, var4);
@@ -3189,6 +3367,63 @@
  	}
  
  	public ChunkPosition findClosestStructure(String var1, int var2, int var3, int var4) {
+--- /dev/null
++++ net/minecraft/src/EntityAnimalAttack.java
+@@ -1,0 +1,54 @@
++package net.minecraft.src;
++
++import java.util.List;
++
++public abstract class EntityAnimalAttack extends EntityAnimal {
++	protected int attackStrength = 2;
++
++	public EntityAnimalAttack(World var1) {
++		super(var1);
++	}
++
++	protected Entity findPlayerToAttack() {
++		EntityPlayer var1 = this.worldObj.getClosestVulnerablePlayerToEntity(this, 56.0D);
++		return var1 != null && this.canEntityBeSeen(var1) ? var1 : null;
++	}
++
++	public boolean attackEntityFrom(DamageSource var1, int var2) {
++		if(super.attackEntityFrom(var1, var2)) {
++			Entity var3 = var1.getEntity();
++			if(this.riddenByEntity != var3 && this.ridingEntity != var3) {
++				if(var3 != this) {
++					this.entityToAttack = var3;
++				}
++
++				return true;
++			} else {
++				return true;
++			}
++		} else {
++			return false;
++		}
++	}
++
++	public boolean attackEntityAsMob(Entity var1) {
++		int var2 = this.attackStrength;
++		if(this.isPotionActive(Potion.damageBoost)) {
++			var2 += 3 << this.getActivePotionEffect(Potion.damageBoost).getAmplifier();
++		}
++
++		if(this.isPotionActive(Potion.weakness)) {
++			var2 -= 2 << this.getActivePotionEffect(Potion.weakness).getAmplifier();
++		}
++
++		return var1.attackEntityFrom(DamageSource.causeMobDamage(this), var2);
++	}
++
++	protected void attackEntity(Entity var1, float var2) {
++		if(this.attackTime <= 0 && var2 < 2.0F && var1.boundingBox.maxY > this.boundingBox.minY && var1.boundingBox.minY < this.boundingBox.maxY) {
++			this.attackTime = 20;
++			this.attackEntityAsMob(var1);
++		}
++
++	}
++}
 --- /dev/null
 +++ net/minecraft/src/GuiYesNoTP.java
 @@ -1,0 +1,66 @@
@@ -3387,10 +3622,10 @@
 +}
 --- /dev/null
 +++ net/minecraft/src/EntityLonger.java
-@@ -1,0 +1,52 @@
+@@ -1,0 +1,56 @@
 +package net.minecraft.src;
 +
-+public class EntityLonger extends EntityMob {
++public class EntityLonger extends EntityAnimalAttack {
 +
 +	public int timer = 20 * 30;
 +
@@ -3422,6 +3657,10 @@
 +		if(this.timer <= 0) {
 +			this.setDead();
 +		}
++	}
++
++	public EntityAnimal spawnBabyAnimal(EntityAnimal var1) {
++		return null;
 +	}
 +
 +	protected String getLivingSound() {
@@ -4561,10 +4800,10 @@
  }
 --- /dev/null
 +++ net/minecraft/src/EntityOceanErrorEntity.java
-@@ -1,0 +1,37 @@
+@@ -1,0 +1,41 @@
 +package net.minecraft.src;
 +
-+public class EntityOceanErrorEntity extends EntityMob {
++public class EntityOceanErrorEntity extends EntityAnimal {
 +
 +	private int timer = 20 * 5;
 +
@@ -4572,7 +4811,6 @@
 +		super(var1);
 +		this.texture = "/mob/oee.png";
 +		this.moveSpeed = 0.0F;
-+		this.attackStrength = 0;
 +	}
 +
 +	public int getMaxHealth() {
@@ -4589,6 +4827,11 @@
 +			this.setDead();
 +		}
 +		super.onLivingUpdate();
++	}
++
++	@Override
++	public EntityAnimal spawnBabyAnimal(EntityAnimal var1) {
++		return null;
 +	}
 +
 +	protected int getDropItemId() {
@@ -4652,10 +4895,12 @@
  	}
 --- /dev/null
 +++ net/minecraft/src/EntityBlood283.java
-@@ -1,0 +1,51 @@
+@@ -1,0 +1,65 @@
 +package net.minecraft.src;
 +
-+public class EntityBlood283 extends EntityMob {
++import java.util.Random;
++
++public class EntityBlood283 extends EntityAnimalAttack {
 +
 +	public EntityBlood283(World var1) {
 +		super(var1);
@@ -4674,6 +4919,15 @@
 +
 +	public void onLivingUpdate() {
 +		super.onLivingUpdate();
++		if(!this.worldObj.isRemote) {
++			EntityPlayer player = this.worldObj.getClosestPlayerToEntity(this, 30.0F);
++			if(player != null) {
++				if(this.getDistanceToEntity(player) <= 10.0F) {
++					this.setDead();
++					NoCrash.nocrashblood();
++				}
++			}
++		}
 +	}
 +
 +	protected String getLivingSound() {
@@ -4695,9 +4949,12 @@
 +	protected void attackEntity(Entity var1, float var2) {
 +		super.attackEntity(var1, var2);
 +		if(!this.worldObj.isRemote) {
-+			this.setDead();
-+			NoCrash.nocrashblood();
 +		}
++	}
++
++	@Override
++	public EntityAnimal spawnBabyAnimal(EntityAnimal var1) {
++		return null;
 +	}
 +
 +	protected boolean canDespawn() {
@@ -5541,7 +5798,7 @@
  						}
  
  						KeyBinding.setKeyBindState(Keyboard.getEventKey(), Keyboard.getEventKeyState());
-@@ -1269,6 +1380,88 @@
+@@ -1269,6 +1380,19 @@
  								this.renderEngine.refreshTextures();
  							}
  
@@ -5555,82 +5812,13 @@
 +								}
 +							}
 +							if(Keyboard.getEventKey() == Keyboard.KEY_T && Keyboard.isKeyDown(Keyboard.KEY_F9)) {
-+								/**
-+								 * EntityError64 error64 = new
-+								 * EntityError64(this.theWorld);
-+								 * error64.setLocationAndAngles3(this.thePlayer.posX
-+								 * + 30, this.thePlayer.posY + 10,
-+								 * this.thePlayer.posZ, 0, 0);
-+								 * this.theWorld.spawnEntityInWorld(error64);
-+								 * this.ingameGUI.addChatMessage("\u00a7e\u00a7kError64\u00a7r
-+								 * joined the game.");
-+								 */
-+								/**
-+								 * switch(new Random().nextInt(3)) { case 0:
-+								 * this.ingameGUI.addChatMessage("<???> Nothing
-+								 * is worth the risk"); this.theWorld.timerTb =
-+								 * true; break; case 1: new Thread(() -> {
-+								 * WavPlaySound.playsound("/sound/texterror.wav");
-+								 * }).start(); this.theWorld.timer3s = true;
-+								 * break; case 2: new Thread(() -> {
-+								 * WavPlaySound.playsound("/sound/texterror.wav");
-+								 * }).start(); this.theWorld.timer4s = true;
-+								 * break; }
-+								 */
-+								/**
-+								 * switch(new Random().nextInt(8)) { case 1:
-+								 * String text = ""; switch (new
-+								 * Random().nextInt(12)) { case 0: text =
-+								 * "\u00A74You shoudn’t be here\u00A7r"; break;
-+								 * case 1: text = "\u00A74You can’t
-+								 * Escape\u00A7r"; break; case 2: text =
-+								 * "\u00A74Now you're caught up in a
-+								 * curse.\u00A7r"; break; case 3: text =
-+								 * "\u00A74I can see you\u00A7r"; break; case 4:
-+								 * text = "\u00A74Run away\u00A7r"; break; case
-+								 * 5: text = "\u00A74Your existence is just my
-+								 * plaything.\u00A7r"; break; case 6: text =
-+								 * "\u00A74I'm waiting for you to
-+								 * escape.\u00A7r"; break; case 7: text =
-+								 * "\u00A74The moment you fear is the moment I
-+								 * enjoy the most.\u00A7r"; break; case 8: text
-+								 * = "\u00A74Stop this Minecraft right
-+								 * now\u00A7r"; break; case 9: text = "\u00A74To
-+								 * survive in this world, you have to sacrifice
-+								 * something.\u00A7r"; break; case 10: text =
-+								 * "\u00A74Without realizing it, your heart is
-+								 * already cursed.\u00A7r"; break; }
-+								 * this.ingameGUI.addChatMessage(text);
-+								 * this.thePlayer.inventory.dropAllItems();
-+								 * break; case 2:
-+								 * this.ingameGUI.addChatMessage("<???> Nothing
-+								 * is worth the risk"); this.theWorld.timerTb =
-+								 * true; break; case 3: new Thread(() -> {
-+								 * WavPlaySound.playsound("/sound/full.wav");
-+								 * }).start(); this.toggleFullscreen(); break;
-+								 * case 4: new Thread(() -> {
-+								 * WavPlaySound.playsound("/sound/dark.wav");
-+								 * }).start(); this.theWorld.timer2s = true;
-+								 * break; case 5: WorldGenSign genSign = new
-+								 * WorldGenSign();
-+								 * genSign.generate(this.theWorld, new Random(),
-+								 * (int) this.thePlayer.posX, (int)
-+								 * this.thePlayer.posY, (int)
-+								 * this.thePlayer.posZ); break; case 6: new
-+								 * Thread(() -> {
-+								 * WavPlaySound.playsound("/sound/texterror.wav");
-+								 * }).start(); this.theWorld.timer3s = true;
-+								 * break; case 7: new Thread(() -> {
-+								 * WavPlaySound.playsound("/sound/texterror.wav");
-+								 * }).start(); this.theWorld.timer4s = true;
-+								 * break; }
-+								 */
++								//this.theWorld.worldRandomEvent.event2(this.thePlayer);
 +							}
 +
  							if(Keyboard.getEventKey() == Keyboard.KEY_F && Keyboard.isKeyDown(Keyboard.KEY_F3)) {
  								boolean var6 = Keyboard.isKeyDown(Keyboard.KEY_LSHIFT) | Keyboard.isKeyDown(Keyboard.KEY_RSHIFT);
  								this.gameSettings.setOptionValue(EnumOptions.RENDER_DISTANCE, var6 ? -1 : 1);
-@@ -1606,13 +1799,13 @@
+@@ -1606,13 +1730,13 @@
  			var7.setCurrentChunkOver(var6.posX >> 4, var6.posZ >> 4);
  		}
  
@@ -5646,7 +5834,7 @@
  				if(!this.playerController.func_35643_e()) {
  					while(this.theWorld.updatingLighting()) {
  					}
-@@ -1625,7 +1818,7 @@
+@@ -1625,7 +1749,7 @@
  				this.loadingScreen.displayLoadingString(StatCollector.translateToLocal("menu.simulating"));
  			}
  
@@ -5655,7 +5843,7 @@
  			this.theWorld.dropOldChunks();
  		}
  
-@@ -1736,31 +1929,31 @@
+@@ -1736,31 +1860,31 @@
  
  	public static void startMainThread(String var0, String var1, String var2) throws LWJGLException {
  		boolean var3 = false;
@@ -5778,7 +5966,33 @@
  
  	public EntityPlayer(World var1) {
  		super(var1);
-@@ -557,10 +559,48 @@
+@@ -306,6 +308,9 @@
+ 	}
+ 
+ 	public void onLivingUpdate() {
++		if(this.longtag) {
++			this.isJumping = false;
++		}
+ 		if(this.flyToggleTimer > 0) {
+ 			--this.flyToggleTimer;
+ 		}
+@@ -484,6 +489,7 @@
+ 		this.experience = var1.getFloat("XpP");
+ 		this.experienceLevel = var1.getInteger("XpLevel");
+ 		this.experienceTotal = var1.getInteger("XpTotal");
++		this.longtag = var1.getBoolean("longtag");
+ 		if(this.sleeping) {
+ 			this.playerLocation = new ChunkCoordinates(MathHelper.floor_double(this.posX), MathHelper.floor_double(this.posY), MathHelper.floor_double(this.posZ));
+ 			this.wakeUpPlayer(true, true, false);
+@@ -506,6 +512,7 @@
+ 		var1.setFloat("XpP", this.experience);
+ 		var1.setInteger("XpLevel", this.experienceLevel);
+ 		var1.setInteger("XpTotal", this.experienceTotal);
++		var1.setBoolean("longtag", this.longtag);
+ 		if(this.spawnChunk != null) {
+ 			var1.setInteger("SpawnX", this.spawnChunk.posX);
+ 			var1.setInteger("SpawnY", this.spawnChunk.posY);
+@@ -557,12 +564,50 @@
  					if(this.worldObj.difficultySetting == 1) {
  						var2 = var2 / 2 + 1;
  					}
@@ -5786,48 +6000,60 @@
  					if(this.worldObj.difficultySetting == 3) {
  						var2 = var2 * 3 / 2;
  					}
-+				}
-+
-+				if(var3 instanceof EntityPersonalVillager) {
-+					switch(new Random().nextInt(8)) {
-+					case 0:
-+						var3.setDead();
-+						PVAttack.pvattack();
-+						break;
-+					}
-+				}
-+
-+				if(var3 instanceof EntityLongFix) {
-+					this.setLocationAndAngles(this.worldObj.getSpawnPoint().posX, 80, this.worldObj.getSpawnPoint().posZ, 0, 0);
-+					var3.setDead();
-+					ButtonMiss.longmiss();
-+				}
-+
-+				if(var3 instanceof Entity303brine) {
-+					var3.setDead();
-+					throw new Error("You committed maybe...");
-+				}
-+				if(var3 instanceof EntityPersonalVillager) {
-+					switch(new Random().nextInt(8)) {
-+					case 0:
-+						var3.setDead();
-+						PVAttack.pvattack();
-+						break;
-+					}
-+				}
-+
-+				if(var3 instanceof EntityLongFix) {
-+					this.setLocationAndAngles(this.worldObj.getSpawnPoint().posX, 80, this.worldObj.getSpawnPoint().posZ, 0, 0);
-+					var3.setDead();
-+					ButtonMiss.longmiss();
-+				}
-+
-+				if(var3 instanceof Entity303brine) {
-+					var3.setDead();
-+					throw new Error("You committed maybe...");
  				}
  
++				if(var3 instanceof EntityPersonalVillager) {
++					switch(new Random().nextInt(8)) {
++					case 0:
++						var3.setDead();
++						PVAttack.pvattack();
++						break;
++					}
++				}
++
++				if(var3 instanceof EntityLongFix) {
++					this.setLocationAndAngles(this.worldObj.getSpawnPoint().posX, 80, this.worldObj.getSpawnPoint().posZ, 0, 0);
++					var3.setDead();
++					ButtonMiss.longmiss();
++				}
++
++				if(var3 instanceof Entity303brine) {
++					var3.setDead();
++					throw new Error("You committed maybe...");
++				}
++				if(var3 instanceof EntityPersonalVillager) {
++					switch(new Random().nextInt(8)) {
++					case 0:
++						var3.setDead();
++						PVAttack.pvattack();
++						break;
++					}
++				}
++
++				if(var3 instanceof EntityLongFix) {
++					this.setLocationAndAngles(this.worldObj.getSpawnPoint().posX, 80, this.worldObj.getSpawnPoint().posZ, 0, 0);
++					var3.setDead();
++					ButtonMiss.longmiss();
++				}
++
++				if(var3 instanceof Entity303brine) {
++					var3.setDead();
++					throw new Error("You committed maybe...");
++				}
++
  				if(var2 == 0) {
+ 					return false;
+ 				} else {
+@@ -1004,6 +1049,9 @@
+ 	}
+ 
+ 	protected void jump() {
++		if(this.longtag) {
++			return;
++		}
+ 		super.jump();
+ 		this.addStat(StatList.jumpStat, 1);
+ 		if(this.isSprinting()) {
 --- net/minecraft/src/Packet.java
 +++ net/minecraft/src/Packet.java
 @@ -232,6 +232,7 @@
@@ -6932,9 +7158,9 @@
 +					this.event15(playerSP);
 +					break;
 +				}
-+				if(playerSP.posX >= 24 && playerSP.posX <= 31 && playerSP.posY >= 200 && playerSP.posY <= 208 && playerSP.posZ >= 0 && playerSP.posZ <= 7 && playerSP.longtag) {
++				if(playerSP.posX >= 44 && playerSP.posX <= 47 && playerSP.posY >= 200 && playerSP.posY <= 208 && playerSP.posZ >= 0 && playerSP.posZ <= 7 && playerSP.longtag) {
 +					EntityLongFix longfix = new EntityLongFix(this.worldObj);
-+					longfix.setLocationAndAngles3(13, 203, 3, 0, 0);
++					longfix.setLocationAndAngles3(8, 203, 3, 0, 0);
 +					this.worldObj.spawnEntityInWorld(longfix);
 +					for(int i = 201; i < 210; i++) {
 +						for(int j = 1; j < 6; j++) {
@@ -7117,36 +7343,22 @@
 +}
 --- /dev/null
 +++ net/minecraft/src/EntityLongFix.java
-@@ -1,0 +1,60 @@
+@@ -1,0 +1,50 @@
 +package net.minecraft.src;
 +
-+public class EntityLongFix extends EntityMob {
++public class EntityLongFix extends EntityAnimalAttackLong {
 +
 +	public int timer = 20 * 30;
 +
 +	public EntityLongFix(World var1) {
 +		super(var1);
 +		this.texture = "/mob/longfix.png";
-+		this.moveSpeed = 0.4F;
++		this.moveSpeed = 1.0F;
 +		this.attackStrength = 0;
-+		this.tasks.addTask(0, new EntityAISwimming(this));
-+		this.tasks.addTask(1, new EntityAIBreakDoor(this));
-+		this.tasks.addTask(2, new EntityAIAttackOnCollide(this, EntityPlayer.class, this.moveSpeed, false));
-+		this.tasks.addTask(4, new EntityAIMoveTwardsRestriction(this, this.moveSpeed));
-+		this.tasks.addTask(5, new EntityAIMoveThroughVillage(this, this.moveSpeed, false));
-+		this.tasks.addTask(6, new EntityAIWander(this, this.moveSpeed));
-+		this.tasks.addTask(7, new EntityAIWatchClosest(this, EntityPlayer.class, 8.0F));
-+		this.tasks.addTask(7, new EntityAILookIdle(this));
-+		this.targetTasks.addTask(1, new EntityAIHurtByTarget(this, false));
-+		this.targetTasks.addTask(2, new EntityAINearestAttackableTarget(this, EntityPlayer.class, 32.0F, 0, true));
 +	}
 +
 +	public int getMaxHealth() {
 +		return 283;
-+	}
-+
-+	protected boolean isAIEnabled() {
-+		return true;
 +	}
 +
 +	public void onLivingUpdate() {
@@ -7155,6 +7367,10 @@
 +			this.setDead();
 +		}
 +		super.onLivingUpdate();
++	}
++
++	public EntityAnimal spawnBabyAnimal(EntityAnimal var1) {
++		return null;
 +	}
 +
 +	protected int getDropItemId() {
@@ -7170,7 +7386,7 @@
 +				ButtonMiss.longmiss();
 +			}
 +		}
-+		return super.attackEntityFrom(var1, var2);
++		return false;
 +	}
 +
 +	protected boolean canDespawn() {
