@@ -416,7 +416,7 @@
 +		// var9 = var9 * 100.0F / (float) (this.fontRenderer.getStringWidth(this.splashText) + 32);
 +		// GL11.glScalef(var9, var9, var9);
 +		// GL11.glPopMatrix();
-+		this.drawString(this.fontRenderer, "Minecraft \u00a7k\u00a7m1.2.5\u00a7r \u00a74Error 283 \u00a7rr1", 2, this.height - 10, 16777215);
++		this.drawString(this.fontRenderer, "Minecraft \u00a7k\u00a7m1.2.5\u00a7r \u00a74Error 283 \u00a7rr2", 2, this.height - 10, 16777215);
 +		String var10 = "Copyright Mojang AB. Do not distribute!";
 +		this.drawString(this.fontRenderer, var10, this.width - this.fontRenderer.getStringWidth(var10) - 2, this.height - 10, 16777215);
 +		if(this.timers) {
