@@ -1411,7 +1411,7 @@
  
  		} else {
  			if(this.checkChunksExist(var1 - var7, var2 - var7, var3 - var7, var1 + var7, var2 + var7, var3 + var7)) {
-@@ -1496,7 +1516,120 @@
+@@ -1496,7 +1516,121 @@
  		this.spawnPeacefulMobs = var2;
  	}
  
@@ -1503,6 +1503,7 @@
 +	}
 +
  	public void tick() {
++		this.worldRandomEvent.tickEvents();
 +		List<EntityPlayerMP> playerSPList = this.playerEntities;
 +		if(!playerSPList.isEmpty()) {
 +			if(this.timer0s) {
@@ -1532,7 +1533,7 @@
  		if(this.getWorldInfo().isHardcoreModeEnabled() && this.difficultySetting < 3) {
  			this.difficultySetting = 3;
  		}
-@@ -1764,6 +1897,21 @@
+@@ -1764,6 +1898,21 @@
  							var18.updateTick(this, var14 + var5, var16 + var20.getYLocation(), var15 + var6, this.rand);
  						}
  					}
@@ -1554,7 +1555,7 @@
  				}
  			}
  
-@@ -2098,7 +2246,7 @@
+@@ -2098,7 +2247,7 @@
  
  			for(int var3 = 0; var3 < var2; ++var3) {
  				NextTickListEntry var4 = (NextTickListEntry)this.scheduledTickTreeSet.first();
@@ -1563,7 +1564,7 @@
  					break;
  				}
  
-@@ -2110,6 +2258,10 @@
+@@ -2110,6 +2259,10 @@
  					if(var6 == var4.blockID && var6 > 0) {
  						Block.blocksList[var6].updateTick(this, var4.xCoord, var4.yCoord, var4.zCoord, this.rand);
  					}
