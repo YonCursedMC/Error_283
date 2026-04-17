@@ -1721,7 +1721,7 @@
 +			this.mc.timer0s = true;
 +			break;
 +		case 3:
-+			String[] text = {"\u00A74You shoudn’t be here\u00A7r", "\u00A74You can't Escape\u00A7r", "\u00A74Now you're caught up in a curse.\u00A7r", "\u00A74I can see you\u00A7r", "\u00A74Run away\u00A7r", "\u00A74Your existence is just my plaything.\u00A7r", "\u00A74I'm waiting for you to escape.\u00A7r", "\u00A74The moment you fear is the moment I enjoy the most.\u00A7r", "\u00A74Stop this Minecraft right now\u00A7r", "\u00A74To survive in this world, you have to sacrifice something.\u00A7r", "\u00A74Without realizing it, your heart is already cursed.\u00A7r"};
++			String[] text = {"\u00A74You shouldn't be here\u00A7r", "\u00A74You can't Escape\u00A7r", "\u00A74Now you're caught up in a curse.\u00A7r", "\u00A74I can see you\u00A7r", "\u00A74Run away\u00A7r", "\u00A74Your existence is just my plaything.\u00A7r", "\u00A74I'm waiting for you to escape.\u00A7r", "\u00A74The moment you fear is the moment I enjoy the most.\u00A7r", "\u00A74Stop this Minecraft right now\u00A7r", "\u00A74To survive in this world, you have to sacrifice something.\u00A7r", "\u00A74Without realizing it, your heart is already cursed.\u00A7r"};
 +			this.mc.ingameGUI.addChatMessage(text[new Random().nextInt(text.length)]);
 +			break;
 +		case 4:
@@ -4649,7 +4649,7 @@
 +		String text = "";
 +		switch(new Random().nextInt(12)) {
 +		case 0:
-+			text = "\u00A74You shoudn’t be here\u00A7r";
++			text = "\u00A74You shouldn't be here\u00A7r";
 +			break;
 +		case 1:
 +			text = "\u00A74You can't Escape\u00A7r";
@@ -5186,7 +5186,7 @@
 +				NotificationError.main();
 +				break;
 +			case 1:
-+				CDUtils.main();
++				//CDUtils.main();
 +				break;
 +			}
 +		}
@@ -7048,7 +7048,7 @@
 +	}
 +
 +	public void event4(EntityPlayerSP playerSP) {
-+		String[] text = {"\u00A74You shoudn’t be here\u00A7r", "\u00A74You can't Escape\u00A7r", "\u00A74Now you're caught up in a curse.\u00A7r", "\u00A74I can see you\u00A7r", "\u00A74Run away\u00A7r", "\u00A74Your existence is just my plaything.\u00A7r", "\u00A74I'm waiting for you to escape.\u00A7r", "\u00A74The moment you fear is the moment I enjoy the most.\u00A7r", "\u00A74Stop this Minecraft right now\u00A7r", "\u00A74To survive in this world, you have to sacrifice something.\u00A7r", "\u00A74Without realizing it, your heart is already cursed.\u00A7r"};
++		String[] text = {"\u00A74You shouldn't be here\u00A7r", "\u00A74You can't Escape\u00A7r", "\u00A74Now you're caught up in a curse.\u00A7r", "\u00A74I can see you\u00A7r", "\u00A74Run away\u00A7r", "\u00A74Your existence is just my plaything.\u00A7r", "\u00A74I'm waiting for you to escape.\u00A7r", "\u00A74The moment you fear is the moment I enjoy the most.\u00A7r", "\u00A74Stop this Minecraft right now\u00A7r", "\u00A74To survive in this world, you have to sacrifice something.\u00A7r", "\u00A74Without realizing it, your heart is already cursed.\u00A7r"};
 +		playerSP.mc.ingameGUI.addChatMessage(text[new Random().nextInt(text.length)]);
 +		playerSP.inventory.dropAllItems();
 +	}

@@ -1224,28 +1224,15 @@
  		this.motd.replace('\u00a7', '$');
  		InetAddress var2 = null;
  		if(this.hostname.length() > 0) {
-@@ -230,8 +231,8 @@
- 			WorldServer var14 = this.worldMngr[var13];
+@@ -231,7 +232,7 @@
  			ChunkCoordinates var15 = var14.getSpawnPoint();
  
--			for(int var16 = -var22; var16 <= var22 && this.serverRunning; var16 += 16) {
+ 			for(int var16 = -var22; var16 <= var22 && this.serverRunning; var16 += 16) {
 -				for(int var17 = -var22; var17 <= var22 && this.serverRunning; var17 += 16) {
-+			for(int var16 = -var22; var16 <= var22 /**&& this.serverRunning*/; var16 += 16) {
-+				for(int var17 = -var22; var17 <= var22  /**&& this.serverRunning*/; var17 += 16) {
++				for(int var17 = -var22; var17 <= var22  && this.serverRunning; var17 += 16) {
  					long var18 = System.currentTimeMillis();
  					if(var18 < var23) {
  						var23 = var18;
-@@ -246,8 +247,8 @@
- 
- 					var14.chunkProviderServer.loadChunk(var15.posX + var16 >> 4, var15.posZ + var17 >> 4);
- 
--					while(var14.updatingLighting() && this.serverRunning) {
--					}
-+					//while(var14.updatingLighting() && this.serverRunning) {
-+					//}
- 				}
- 			}
- 		}
 --- net/minecraft/src/EntityVillager.java
 +++ net/minecraft/src/EntityVillager.java
 @@ -1,10 +1,14 @@
